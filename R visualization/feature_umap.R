@@ -9,7 +9,7 @@ library("Rtsne")
   
 setwd("~/Desktop/ScilifeLab_Work/Phd/Project 1_Comparing CP and NN features for MoA prediction//UMAPS_DMSO/Unnormalized data/")
 
-norm_cp_all <- read.xlsx("unnorm_nn_all_filteredbbox.xlsx")
+norm_cp_all <- read.xlsx("unnorm_efficientnetb0_all_filteredbbox.xlsx")
 #norm_nn_all <- read.xlsx("unnorm_cp_all.xlsx") 
 
 #add a column called CLUSTER with new labels 
@@ -36,8 +36,8 @@ columns_to_drop <- grep("_X$|_Y$", names(df_umap), value = TRUE)
 # Remove the columns
 df_umap <- df_umap[, !(names(df_umap) %in% columns_to_drop)]
 df_umapp <- df_umap
-df_umapp[, 4:515] <- lapply(df_umapp[, 4:515], as.numeric) #6 TO 229 FOR CP and 7:518 for nn
-data.umap <- umap(df_umapp[4:515],  learning_rate = 0.001, metric = "cosine", min_dist = 0.99)  
+df_umapp[, 6:1285] <- lapply(df_umapp[, 6:1285], as.numeric) #6 TO 229 FOR CP and 7:518 for nn
+data.umap <- umap(df_umapp[6:1285],  learning_rate = 0.001, metric = "cosine", min_dist = 0.99)  
 
 #Plot UMAP
 set.seed(123)
@@ -45,7 +45,7 @@ combination_colors <- c("orange", "darkgreen", "blue","deeppink", "red" )
 umap_plot <- ggplot(df_umap, aes(x = data.umap$layout[, 1], y = data.umap$layout[, 2], colour = as.factor(Combination))) +
   geom_point(size = 3) + # Adjust the alpha parameter for transparency
   xlim(c(-15, 20)) +
-  ylim(c(-15, 20)) +
+  ylim(c(-15, 15)) +
   labs(x = 'UMAP 1', y = 'UMAP 2') +  # Add axis labels here
   theme_minimal() +
   theme(axis.text = element_text(size = 32, color = "black"),
@@ -57,7 +57,7 @@ umap_plot
 #Plot PCA
 set.seed(123)
 combination_colors <- c("orange", "darkgreen", "blue","deeppink", "red" )
-data.pca <- prcomp(df_umapp[4:515], center = TRUE, scale. = TRUE, rank =30) 
+data.pca <- prcomp(df_umapp[6:1285], center = TRUE, scale. = TRUE, rank =30) 
 
 # Get eigenvalues
 eigenvalues <- data.pca$sdev^2
@@ -76,8 +76,8 @@ pcaData <- cbind(pcaData, df_umap$Combination) # add species to df
 colnames(pcaData) <- c("PC1", "PC2", "Combination")
 pca_plot <- ggplot(pcaData, aes(PC1, PC2, color = as.factor(Combination))) +
   geom_point(size = 3) + # Adjust the alpha parameter for transparency
-  xlim(c(-35, 30)) +
-  ylim(c(-35, 30)) +
+  xlim(c(-50, 50)) +
+  ylim(c(-50, 50)) +
   labs(x = 'PC 1', y = 'PC 2') +  # Add axis labels here
   theme_minimal() +
   theme(axis.text = element_text(size = 32, color = "black"),

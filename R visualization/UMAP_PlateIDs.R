@@ -22,7 +22,7 @@ library("pracma")
 setwd("~/Desktop/ScilifeLab_Work/Phd/Project 1_Comparing CP and NN features for MoA prediction/UMAPS_DMSO/Unnormalized data/")
 
 #PLot UMAP with PlateIDs
-norm_cp_all <- read.xlsx("unnorm_nn_trainedd2d3d4_all.xlsx")
+norm_cp_all <- read.xlsx("unnorm_efficientnetb0_all.xlsx")
 
 #add a column called CLUSTER with new labels 
 norm_cp_all$Cluster <- norm_cp_all$Category
@@ -53,14 +53,14 @@ df_umap <- df_umap[, !(names(df_umap) %in% columns_to_drop)]
 df_umapp <- df_umap
 df_umapp <- df_umapp[df_umapp$Combination %in% c('MHB'), ]
 
-df_umapp[, 7:518] <- lapply(df_umapp[, 7:518], as.numeric) #6:229 FOR CP and 7:518 for nn
+df_umapp[, 6:1286] <- lapply(df_umapp[, 6:1286], as.numeric) #6:229 FOR CP and 7:518 for nn
 
-df_umapp[7:518] <- scale(df_umapp[7:518]) #FOR kb
+df_umapp[6:1286] <- scale(df_umapp[6:1286]) #FOR kb
 # Add a small constant to avoid zero vectors
-df_umapp[7:518] <- df_umapp[7:518] + 1e-10 #FOR MHB
+df_umapp[6:1286] <- df_umapp[6:1286] + 1e-10 #FOR MHB
 
 
-data.umap <- umap(df_umapp[7:518],  learning_rate = 0.001, metric = "cosine", min_dist = 0.99, n_neighbors=30)  
+data.umap <- umap(df_umapp[6:1286],  learning_rate = 0.001, metric = "cosine", min_dist = 0.99, n_neighbors=30)  
 
 # Define a color palette for Plate numbers
 plate_colors <- c("red", "green", "blue4", "deeppink", "darkgreen", "cyan4", "purple", "brown")
